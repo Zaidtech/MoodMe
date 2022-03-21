@@ -1,40 +1,27 @@
-const app  = require('express')();
-const http = require('http')
+const express  = require('express');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var app = express();
+var path = require('path')
+var Restaurant = require("./models/restuarants");
+var restuarantsRoutes = require("./routes/router");
 var port = 8080;
+const MONGODB_URL = require("./config/db.config");
+const { join } = require('path');
 
 // connect to db
-const MONGODB_URL = 'mongodb+srv://AMU_VLAB_ADMIN:ZVL1vxcOIdbJ2VkH@cluster0.5csqp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(MONGODB_URL.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
+app.set('views',path.join(__dirname,'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-
-app.get("/", (req,res)=>{
-    res.send("server running!!!");
-});
-
-app.get("/viewjson", (req,res)=>{
-    var body ="";
-    request(json_url,   options, (error, res, body)=>{
-
-        if(error)
-            return console.log(error);
-        else{
-            body = res;
-            console.log(body);
-        }
-    });
-
-    // res.send(body);
-
-});
+app.use(restuarantsRoutes);
 
 app.listen(port, ()=>{
-
-    console.log("server started!!");
+    console.log("Server running  !!");
 
 });
 

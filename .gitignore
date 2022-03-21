@@ -1,6 +1,6 @@
 # dependencies
 /node_modules
-
+/config
 
 # testing
 /coverage
@@ -14,5 +14,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+
+
 
 
