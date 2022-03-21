@@ -20,13 +20,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride("_method"));
 
 
-
 app.use(restuarantsRoutes);
 
 
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
 
-app.listen(process.env.PORT, process.env.IP, function(){
+
+app.listen(PORT, function(){
         console.log("Dashboard server has started!")
     });
 
