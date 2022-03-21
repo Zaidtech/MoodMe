@@ -1,5 +1,3 @@
-// alert("I am connected!!")
-console.log("I am connected")
 var room = 1;
 function add_fields() {
     room++;
@@ -12,10 +10,34 @@ function add_fields() {
 }
 
 
-$(document).ready(function(){
- 
-    var currentBtn;
+var address = {}
+function fillData(id,name,cuisine,r_id,building,street){
+   
     
+    document.getElementById("rn").value = name;
+    document.getElementById("rc").value = cuisine;undefined
+    document.getElementById("r_id").value = r_id;
+    document.getElementById("rb").value = building;
+    document.getElementById("rs").value = street;
+    
+}
+
+var room1 = 1;
+function add_efields() {
+    room1++;
+    var objTo = document.getElementById('room_fields')  
+    var divtest = document.createElement("div");
+    divtest.innerHTML = 
+    '<div class="content"><span>Date: <input type="date" style="width:100px;" name="grade[][date]" value="" />   Grade: <input type="text" style="width:48px;" name="grade[][grade]" value="" />  Score: <input type="text" style="width:48px;" name="grade[][score]" value="" /></div>'    
+    
+    objTo.appendChild(divtest)
+}
+
+
+
+$(document).ready(function(){
+
+    var currentBtn;    
     $('.delete').on('click', function(event){
     currentBtn = event.target;
     $('#deleteEmployeeModal').modal('show');
@@ -28,9 +50,10 @@ $(document).ready(function(){
         
     form_action[0].action = "/restaurant/"+r_id+"?_method=DELETE";
     
-    
+
     });
 });
+
 
 $(document).ready(function(){
  
@@ -47,7 +70,6 @@ $(document).ready(function(){
     console.log(form_action[0]);
         
     form_action[0].action = "/restaurant/"+r_id+"?_method=PUT";
-    
     
     });
 });

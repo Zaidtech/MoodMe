@@ -7,14 +7,12 @@ const restuarants = require('../models/restuarants');
 var router = express.Router();
 
 var resultPerPage = 20;
-var no_of_results = 0;
+var no_of_results = 25360;
 
 
 router.get("/restaurant", function(req,res){
-
     res.redirect("/");
 });
-
 
 router.get("/", function(req,res){
     // console.log(req)
@@ -23,7 +21,7 @@ router.get("/", function(req,res){
         Restaurant.find({}, (err,result)=>{
             if(err) throw err;
             no_of_results = result.length;
-            // console.log(result.length);
+            console.log(result.length);
         
         let numberof_pages = Math.ceil(no_of_results/resultPerPage);
         let page = req.query.page ? Number(req.query.page): 1;
@@ -131,6 +129,7 @@ router.post("/", function(req,res){
         if (err)
             console.log(err);
         else {
+            no_of_results++;
             console.log("Added a new restauant to the database");
             res.redirect('/');
         }
@@ -139,13 +138,6 @@ router.post("/", function(req,res){
 });
 
 
-router.post("/change", function(req,res){
-    resultPerPage = Number(req.body.resultPP);
-    console.log(Number(req.body.resultPP));
-    res.redirect("/restaurant");
-});
-
-
 router.delete("/restaurant/:id", function (req, res) {
     // console.log(req.params.id);
     // res.send("delete route")
@@ -162,40 +154,43 @@ router.delete("/restaurant/:id", function (req, res) {
     });
 });
 
-router.delete("/restaurant/:id", function (req, res) {
-    // console.log(req.params.id);
-    // res.send("delete route")
-
-    Restaurant.findByIdAndRemove(req.params.id, function (err) {
-        if (err) {
-            // console.log(err);
-            res.redirect("/");
-        } else {
-            no_of_results--;
-            console.log("restaurant deleted!!")
-            res.redirect("/");
-        }
-    });
-});
 
 
 // Http form only make use of get and post and fails to works on PUT,Delete etc.
 router.put("/restaurant/:id", function(req,res){
 
     // updated data.
-    // /blogs/<%=blog._id%>?_method=PUT" method='POST'
     
-    req.body.blog.body = req.sanitize(req.body.blog.body); 
-    // Blog.findByIdAndUpadte(id,newdata,callback)
-    Blog.findByIdAndUpdate(req.params.id, , function(err,updateBlog){
+    // /blogs/<%=blog._id%>?_method=PUT" method='POST'
+
+    var name = req.body.name;
+    var cuisine = req.body.cuisine;
+    var street= req.body['address[street]'];
+    var building = req.body['address[building]'];
+
+    var address = {
+        street: street,
+        building: building
+    };
+
+    var restaurant_id = req.body.r_id;
+    var newRestaurant = { address:address, cuisine:cuisine, name:name,  restaurant_id:restaurant_id };
+    
+    // Restaurant.findByIdAndUpadte(req.params.id,newRestaurant,callback)
+    Restaurant.findByIdAndUpdate(req.params.id,newRestaurant,function(err,restauant){
         if(err)
+            res.redirect("err");
+        else{
+            restauant.save();
             res.redirect("/");
-        else    
-            res.redirect("/restaurants/"+req.params.id);
+        }    
     });
 });
 
-
-
+router.post("/change", function(req,res){
+    resultPerPage = Number(req.body.resultPP);
+    console.log(Number(req.body.resultPP));
+    res.redirect("/restaurant");
+});
 
 module.exports = router;

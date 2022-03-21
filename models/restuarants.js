@@ -8,6 +8,7 @@ var restaurantSchema = new mongoose.Schema({
     },
 
     cuisine : String,
+
     grades: [
         { 
         date: {
@@ -17,6 +18,7 @@ var restaurantSchema = new mongoose.Schema({
         score: Number
         }
     ],
+    
     name: String,
     restaurant_id: Number
 
