@@ -10,3 +10,46 @@ function add_fields() {
     
     objTo.appendChild(divtest)
 }
+
+
+$(document).ready(function(){
+ 
+    var currentBtn;
+    
+    $('.delete').on('click', function(event){
+    currentBtn = event.target;
+    $('#deleteEmployeeModal').modal('show');
+        
+    var r_id = "";
+    r_id = currentBtn.parentNode.name;
+        
+    var form_action = document.getElementsByClassName('df');
+    console.log(form_action[0]);
+        
+    form_action[0].action = "/restaurant/"+r_id+"?_method=DELETE";
+    
+    
+    });
+});
+
+$(document).ready(function(){
+ 
+    var currentBtn;
+    
+    $('.edit').on('click', function(event){
+    currentBtn = event.target;
+    $('#editEmployeeModal').modal('show');
+        
+    var r_id = "";
+    r_id = currentBtn.parentNode.name;
+        
+    var form_action = document.getElementsByClassName('ef');
+    console.log(form_action[0]);
+        
+    form_action[0].action = "/restaurant/"+r_id+"?_method=PUT";
+    
+    
+    });
+});
+
+

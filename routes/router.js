@@ -5,13 +5,18 @@ var Restaurant = require("../models/restuarants");
 const req = require('express/lib/request');
 const restuarants = require('../models/restuarants');
 var router = express.Router();
-// var resultPerPage = 20;
+
 var resultPerPage = 20;
-var no_of_results = 2000;
+var no_of_results = 0;
+
+
+router.get("/restaurant", function(req,res){
+
+    res.redirect("/");
+});
 
 
 router.get("/", function(req,res){
-
     // console.log(req)
     if(no_of_results==0){
 
@@ -81,12 +86,8 @@ router.get("/", function(req,res){
     }
 });
 
-
-
-
-// when a particular restaurant is selcted!!
 router.post("/", function(req,res){
-    console.log(req.body['grade[][date]'].length);
+    // console.log(req.body['grade[][date]'].length);
 
     var name = req.body.name;
     var cuisine = req.body.cuisine;
@@ -141,17 +142,59 @@ router.post("/", function(req,res){
 router.post("/change", function(req,res){
     resultPerPage = Number(req.body.resultPP);
     console.log(Number(req.body.resultPP));
-    res.redirect("/");
+    res.redirect("/restaurant");
 });
 
 
+router.delete("/restaurant/:id", function (req, res) {
+    // console.log(req.params.id);
+    // res.send("delete route")
 
-
-
-
-router.get("/add", function(req,res){
-    alert("Alert about to add a new restaurant!!");
+    Restaurant.findByIdAndRemove(req.params.id, function (err) {
+        if (err) {
+            // console.log(err);
+            res.redirect("/");
+        } else {
+            no_of_results--;
+            console.log("restaurant deleted!!")
+            res.redirect("/");
+        }
+    });
 });
+
+router.delete("/restaurant/:id", function (req, res) {
+    // console.log(req.params.id);
+    // res.send("delete route")
+
+    Restaurant.findByIdAndRemove(req.params.id, function (err) {
+        if (err) {
+            // console.log(err);
+            res.redirect("/");
+        } else {
+            no_of_results--;
+            console.log("restaurant deleted!!")
+            res.redirect("/");
+        }
+    });
+});
+
+
+// Http form only make use of get and post and fails to works on PUT,Delete etc.
+router.put("/restaurant/:id", function(req,res){
+
+    // updated data.
+    // /blogs/<%=blog._id%>?_method=PUT" method='POST'
+    
+    req.body.blog.body = req.sanitize(req.body.blog.body); 
+    // Blog.findByIdAndUpadte(id,newdata,callback)
+    Blog.findByIdAndUpdate(req.params.id, , function(err,updateBlog){
+        if(err)
+            res.redirect("/");
+        else    
+            res.redirect("/restaurants/"+req.params.id);
+    });
+});
+
 
 
 
